@@ -18,6 +18,7 @@ public class AdminTest {
 		AdminDao dao=(AdminDao)MybatisUtils.getMapper(AdminDao.class);
 		Admin a=dao.login("admin");
 		System.out.println(a);
+		System.out.println(a);
 	}
 	@Test
 	public void test1(){
