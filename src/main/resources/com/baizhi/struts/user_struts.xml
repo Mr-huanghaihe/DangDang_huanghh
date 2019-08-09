@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd" >
+<struts>
+ 	<include file="com/baizhi/struts/interceptor_struts.xml"></include>
+ 	<include file="com/baizhi/struts/book_struts.xml"></include>
+	<package name="user" extends="userIntercept" namespace="/user">
+		<action name="loginUser" class="com.baizhi.action.UserAction" method="loginUser">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/book</param>
+				<param name="actionName">main</param>
+			</result>
+			<result name="error">/front/user/login_form.jsp</result>
+		</action>
+		<action name="registerUser" class="com.baizhi.action.UserAction" method="registerUser">
+			<result name="success" type="redirectAction">activeCode</result>
+			<result name="error">/front/user/register_form.jsp</result>
+		</action>
+		<action name="activeCode" class="com.baizhi.action.UserAction" method="activeCode">
+			<result name="success">/front/user/verify_form.jsp</result>
+		</action>
+		<action name="modifyActiveCode" class="com.baizhi.action.UserAction" method="modifyActiveCode">
+			<result name="success">/front/user/register_ok.jsp</result>
+			<result name="error">/front/user/register_form.jsp</result>
+		</action>
+		<action name="exit" class="com.baizhi.action.UserAction" method="exit">
+			<result name="success" type="redirect">/front/user/login_form.jsp</result>
+		</action>
+		<action name="allAddress" class="com.baizhi.action.OrderAction" method="allAddress">
+			<interceptor-ref name="UserStack"></interceptor-ref>
+			<result name="success">/front/order/address_form.jsp</result>
+			<result name="login" type="redirect">/front/user/login_form.jsp</result>
+			<result name="active" type="redirectAction">activeCode</result>
+		</action>
+		<action name="oneAddress" class="com.baizhi.action.OrderAction" method="oneAddress">
+			<result name="success">/front/order/address_form.jsp</result>
+		</action>
+		<action name="addOrderItem" class="com.baizhi.action.OrderAction" method="addOrderItem">
+			<interceptor-ref name="UserStack"></interceptor-ref>
+			<result name="success">/front/order/order_ok.jsp</result>
+			<result name="login" type="redirect">/front/user/login_form.jsp</result>
+			<result name="active" type="redirectAction">activeCode</result>
+		</action>
+	</package>
+</struts>

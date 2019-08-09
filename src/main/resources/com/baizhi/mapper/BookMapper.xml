@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.baizhi.dao.BookDao">
+	<select id="selectAllBooks" resultType="Book">
+		select id, name, author, cover, press, press_date, edition, print_date, impression, isbn, word_num, page_num, sizes, paper, 
+				pack, price, dprice, create_date, editor_recommend, content_abstract, author_abstract, director, media_commentary, category_id, sale, stock
+				from dd_book
+	</select>
+	<insert id="insertBook">
+		insert into dd_book values(#{id},#{name},#{author},#{cover},#{press},#{press_date},#{edition},#{print_date},#{impression},#{isbn},#{word_num},#{page_num},#{sizes},#{paper},#{pack},#{price},#{dprice},#{create_date},#{editor_recommend},#{content_abstract},#{author_abstract},#{director},#{media_commentary},#{category_id},#{sale},#{stock})
+	</insert>
+	<select id="selectByKey" resultType="Book">
+		select id, name, author, cover, press, press_date, edition, print_date, impression, isbn, word_num, page_num, sizes, paper, 
+				pack, price, dprice, create_date, editor_recommend, content_abstract, author_abstract, director, media_commentary, category_id, sale, stock
+				from dd_book
+				<where>
+					<if test="key=='name'">name like '%${context}%'</if>
+					<if test="key=='author'">author like '%${context}%'</if>
+					<if test="key=='press'">press like '%${context}%'</if>
+				</where>
+	</select>
+	<delete id="deleteBook">
+		delete from dd_book where id=#{id}
+	</delete>
+	<update id="updateBook">
+		update dd_book set id=#{id},name=#{name},author=#{author} <if test="cover!=null">,cover=#{cover}</if>, press=#{press}, press_date=#{press_date}, 
+		edition=#{edition}, print_date=#{print_date}, impression=#{impression}, isbn=#{isbn}, word_num=#{word_num},
+		page_num=#{page_num}, sizes=#{sizes}, paper=#{paper}, pack=#{pack}, price=#{price}, dprice=#{dprice}, 
+		create_date=#{create_date}, editor_recommend=#{editor_recommend}, content_abstract=#{content_abstract}, 
+		author_abstract=#{author_abstract}, director=#{director}, media_commentary=#{media_commentary}, category_id=#{category_id}, sale=#{sale}, stock=#{stock}
+		where id=#{id}	
+	</update>
+	<select id="selectById" resultType="Book">
+		select id, name, author, cover, press, press_date, edition, print_date, impression, isbn, word_num, page_num, sizes, paper, 
+				pack, price, dprice, create_date, editor_recommend, content_abstract, author_abstract, director, media_commentary, category_id, sale, stock
+				from dd_book where id=#{id}
+	</select>
+	<select id="selectBySale" resultType="Book">
+		select a.*,rownum from
+		(select id, name, author, cover, press, press_date, edition, print_date, impression, isbn, word_num, page_num, sizes, paper, 
+				pack, price, dprice, create_date, editor_recommend, content_abstract, author_abstract, director, media_commentary, category_id, sale, stock
+				from dd_book order by sale desc) a where rownum between 1 and 8 and sale!=0
+	</select>
+	<select id="selectByCreate_date" resultType="Book">
+		select a.*,rownum from
+		(select id, name, author, cover, press, press_date, edition, print_date, impression, isbn, word_num, page_num, sizes, paper, 
+				pack, price, dprice, create_date, editor_recommend, content_abstract, author_abstract, director, media_commentary, category_id, sale, stock
+				from dd_book order by create_date desc) a where rownum between 1 and 8
+	</select>
+	<select id="selectBySaleAndDate" resultType="Book">
+		select a.*,rownum from
+		(select id, name, author, cover, press, press_date, edition, print_date, impression, isbn, word_num, page_num, sizes, paper, 
+				pack, price, dprice, create_date, editor_recommend, content_abstract, author_abstract, director, media_commentary, category_id, sale, stock
+				from dd_book order by create_date,sale desc) a where rownum between 1 and 8
+	</select>
+	<select id="selectByFirstOrSecond" resultType="Book">
+		select dd.* from (select d.*,rownum r from (select id, name, author, cover, press, press_date, edition, print_date, impression, isbn, word_num, page_num, sizes, paper, 
+			pack, price, dprice, create_date, editor_recommend, content_abstract, author_abstract, director, media_commentary, category_id, sale, stock
+			from dd_book
+				<where>
+					<choose>
+						<when test="sid==null||sid==''">
+							category_id in (select id from category where parentId=#{id})
+						</when>
+						<otherwise>
+							category_id=#{sid}
+						</otherwise>
+					</choose>
+				</where>)d)dd where r between #{begin} and #{end}
+	</select>
+	<select id="getCount" resultType="java.lang.Integer">
+		select count(*) from dd_book
+				<where>
+					<choose>
+						<when test="sid==null||sid==''">
+							category_id in (select id from category where parentId=#{id})
+						</when>
+						<otherwise>
+							category_id=#{sid}
+						</otherwise>
+					</choose>
+				</where>
+	</select>
+</mapper>

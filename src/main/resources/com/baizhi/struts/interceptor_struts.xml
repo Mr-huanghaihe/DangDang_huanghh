@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+	<package name="userIntercept" extends="struts-default">
+		<interceptors>
+			<interceptor name="userInter" class="com.baizhi.interceptor.UserInterceptor"></interceptor>
+			<interceptor-stack name="UserStack">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+				<interceptor-ref name="userInter"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+	</package>
+	<package name="adminIntercept" extends="struts-default">
+		<interceptors>
+			<interceptor name="adminInter" class="com.baizhi.interceptor.AdminInterceptor"></interceptor>
+			<interceptor-stack name="AdminStack">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+				<interceptor-ref name="adminInter"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+	</package>
+</struts>

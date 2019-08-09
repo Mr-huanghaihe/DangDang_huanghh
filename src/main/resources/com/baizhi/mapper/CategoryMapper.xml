@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.baizhi.dao.CategoryDao">
+	<resultMap type="Category" id="result1">
+		<id column="s_id" property="id"/>
+		<result column="s_name" property="name"/>
+		<result column="s_parentId" property="parentId"/>
+		<result column="s_levels" property="levels"/>
+		<association property="first" javaType="Category">
+			<id column="f_id" property="id"/>
+			<result column="f_name" property="name"/>
+			<result column="f_parentId" property="parentId"/>
+			<result column="f_levels" property="levels"/>
+		</association>
+	</resultMap>
+	<select id="selectAll" resultMap="result1">
+		select s.id as s_id,s.name as s_name,s.parentId as s_parentId,s.levels as s_levels,
+	   			f.id as f_id,f.name as f_name,f.parentId as f_parentId,f.levels as f_levels
+	   			from category s left join category f on s.parentId=f.id
+	</select>
+	<insert id="insertOne" parameterType="Category">
+		insert into category(id,name,levels) values(#{id},#{name},#{levels})
+	</insert>
+	<insert id="insertOneSecond" parameterType="Category">
+		insert into category(id,name,parentId,levels) values(#{id},#{name},#{parentId},#{levels})
+	</insert>
+	<select id="selectAllFirst" resultType="Category">
+		select id,name,parentId,levels from category where levels='1'
+	</select>
+	<delete id="deleteOne">
+		delete from category where id=#{id}
+	</delete>
+	<resultMap type="FirstCategory" id="result2">
+		<id column="f_id" property="id"/>
+		<result column="f_name" property="name"/>
+		<result column="f_parentId" property="parentId"/>
+		<result column="f_levels" property="levels"/>
+		<collection property="second" ofType="Category">
+			<id column="s_id" property="id"/>
+			<result column="s_name" property="name"/>
+			<result column="s_parentId" property="parentId"/>
+			<result column="s_levels" property="levels"/>
+		</collection>
+	</resultMap>
+	<select id="selectOneFirst" resultMap="result2">
+		select f.id f_id,f.name f_name,f.parentId f_parentId,f.levels f_levels,
+			   s.id s_id,s.name s_name,s.parentId s_parentId,s.levels s_levels
+			   from category f left join category s on f.id=s.parentId
+			   where f.id=#{id} and f.levels='1'
+	</select>
+	<select id="selectAllSecond" resultType="Category">
+		select id,name,parentId,levels from category where levels='2'
+	</select>
+	<!-- 查询所有的一级和对应的二级 -->
+	<resultMap type="FirstCategory" id="result3">
+		<id column="f_id" property="id"/>
+		<result column="f_name" property="name"/>
+		<result column="f_parentId" property="parentId"/>
+		<result column="f_levels" property="levels"/>
+		<collection property="second" ofType="Category">
+			<id column="s_id" property="id"/>
+			<result column="s_name" property="name"/>
+			<result column="s_parentId" property="parentId"/>
+			<result column="s_levels" property="levels"/>
+		</collection>
+	</resultMap>
+	<select id="selectFirstAndSecond" resultMap="result3">
+		select f.id f_id,f.name f_name,f.parentId f_parentId,f.levels f_levels,
+			   s.id s_id,s.name s_name,s.parentId s_parentId,s.levels s_levels
+			   from category f left join category s on f.id=s.parentId
+			   where f.levels='1'
+	</select>
+</mapper>

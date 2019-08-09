@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.AddressDao">
+	<select id="selectAll" resultType="Address">
+		select id,name,local,zip_code,phone,user_id from dd_address
+			where user_id=#{user_id}
+	</select>
+	<select id="selectOne" resultType="Address">
+		select id,name,local,zip_code,phone,user_id from dd_address
+			where id=#{id}
+	</select>
+	<insert id="insertAddress">
+		insert into dd_address values(#{id},#{name},#{local},#{zip_code},#{phone},#{user_id})
+	</insert>
+	<update id="updateAddress">
+		update dd_address set name=#{name},local=#{local},zip_code=#{zip_code},phone=#{phone}
+			where id=#{id}
+	</update>
+	<insert id="insertOneOrder">
+		insert into dd_order values(#{id},#{order_no},#{user_id},#{total},#{create_date},#{address_id})
+	</insert>
+	<insert id="insertOneItem">
+		insert into dd_item values(#{id},#{book_id},#{count},#{create_date},#{order_id})
+	</insert>
+	<update id="updateBook">
+		update dd_book set sale=#{sale},stock=#{stock} where id=#{id}
+	</update>
+</mapper>

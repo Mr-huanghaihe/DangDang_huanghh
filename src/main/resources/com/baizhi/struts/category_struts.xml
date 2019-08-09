@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd" >
+<struts>
+	<include file="com/baizhi/struts/interceptor_struts.xml"></include>
+	<package name="category" extends="adminIntercept" namespace="/category">
+		<action name="allCategory" class="com.baizhi.action.AdminAction" method="allCategory">
+			<interceptor-ref name="AdminStack"></interceptor-ref>
+			<result name="success">/back/category/show.jsp</result>
+			<result name="login" type="redirect">/index.jsp</result>
+		</action>
+		<action name="addFirstCategory" class="com.baizhi.action.AdminAction" method="addFirstCategory">
+			<result name="success" type="chain">allCategory</result>
+		</action>
+		<action name="allFirst" class="com.baizhi.action.AdminAction" method="allFirst">
+			<result name="success">/back/category/add-second.jsp</result>
+		</action>
+		<action name="allSecond" class="com.baizhi.action.AdminAction" method="allSecond">
+			<result name="success">/back/book/add.jsp</result>
+		</action>
+		<action name="addSecondCategory" class="com.baizhi.action.AdminAction" method="addSecondCategory">
+			<result name="success" type="chain">allCategory</result>
+		</action>
+		<action name="removeOne" class="com.baizhi.action.AdminAction" method="removeOne">
+			<result name="success" type="redirectAction">allCategory</result>
+		</action>
+	</package>
+</struts>
